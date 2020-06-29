@@ -1,0 +1,77 @@
+{% extends "base.twig" %}
+
+{% block title %}Buy that book!{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style type="text/css">
+
+    </style>
+{% endblock %}
+
+{% block body %}
+    <section class="section">
+        <div class="container">
+            <div class="columns is-centered">
+                <div class="column is-half">
+
+                    <h1 class="title">
+                        Book of a month
+                    </h1>
+
+                    <div class="card">
+                        <div class="card-image">
+                            <figure class="image is-4by3">
+                                <img src="https://www.fillmurray.com/660/495" alt="Placeholder image">
+                            </figure>
+                        </div>
+                        <div class="card-content">
+                            <div class="media">
+                                <div class="media-left">
+                                    <figure class="image is-48x48">
+                                        <img src="https://picsum.photos/48/48?random=1" alt="Placeholder image">
+                                    </figure>
+                                </div>
+                                <div class="media-content">
+                                    <p class="title is-4">John Doe</p>
+                                    <p class="subtitle is-6">@johndoe</p>
+                                </div>
+                            </div>
+
+                            <div class="content">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                Phasellus nec iaculis mauris.
+
+                                <p>
+                                    <code class="html">@juljan.by</code>
+                                    <span class="sep"> | </span>
+                                    <a href="#">#sale</a>
+                                    <span class="sep"> | </span>
+                                    <a href="#">#bestseller</a>
+                                </p>
+
+                                <p class="is-size-4">
+                                    Special price for you is <span class="currency">$</span>&nbsp;<strong>{{ price }}</strong>.
+                                </p>
+
+                                <p>
+                                    <time>29 June, 2020</time>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <br/>
+
+                    <p>
+                        <a class="button is-link"
+                           target="_blank"
+                           href="mailto:y.misiukevich@gmail.com">Write mail to order</a>
+                    </p>
+
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
