@@ -6,6 +6,8 @@ namespace App\Service;
 
 final class ReferrerCoefficientMappingService
 {
+    private const DEFAULT_COEFFICIENT = 1.00;
+
     private const SOURCE_BING = 'bing.';
 
     private const SOURCE_GOOGLE = 'google.';
@@ -20,11 +22,13 @@ final class ReferrerCoefficientMappingService
     private function prepareUtmSource(string $source): string
     {
         $source = str_replace(['https'], ['http'], $source);
-        $source = str_replace(['://www.'], ['://'], $source);
+        $source = str_replace(['://www.', 'www.'], ['://', ''], $source);
 
         $partials = parse_url($source);
 
-        return $partials['host'] ?? '';
+        $host = $partials['host'] ?? $partials['path'];
+
+        return strtolower($host);
     }
 
     public function setUtmSource(?string $source):  ReferrerCoefficientMappingService
@@ -36,14 +40,24 @@ final class ReferrerCoefficientMappingService
         return $this;
     }
 
+    private function isUtmSourceValid(): bool
+    {
+        return (null !== $this->utmSource) && strlen($this->utmSource) > 0;
+    }
+
     public function getCoefficient(): float
     {
-        foreach (self::SOURCE_MAPPING as $provider => $coefficient) {
-            if (false !== strpos($provider, $this->utmSource)) {
-                return $coefficient;
+        if ($this->isUtmSourceValid()) {
+            foreach (self::SOURCE_MAPPING as $provider => $coefficient) {
+                if (
+                    false !== strpos($provider, $this->utmSource) ||
+                    false !== strpos($this->utmSource, $provider)
+                ) {
+                    return $coefficient;
+                }
             }
         }
 
-        return 1.00;
+        return self::DEFAULT_COEFFICIENT;
     }
 }
