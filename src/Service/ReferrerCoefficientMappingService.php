@@ -31,7 +31,7 @@ final class ReferrerCoefficientMappingService
         return strtolower($host);
     }
 
-    public function setUtmSource(?string $source):  ReferrerCoefficientMappingService
+    public function setUtmSource(?string $source): ReferrerCoefficientMappingService
     {
         if (null !== $source) {
             $this->utmSource = $this->prepareUtmSource($source);

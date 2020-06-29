@@ -26,8 +26,6 @@ final class PriceCalculatorService
     }
 
     /**
-     * @param float $basePrice
-     *
      * @return PriceCalculatorService
      */
     public function setBasePrice(float $basePrice)
@@ -37,19 +35,11 @@ final class PriceCalculatorService
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getReferrer(): ?string
     {
         return $this->referrer;
     }
 
-    /**
-     * @param string|null $referrer
-     *
-     * @return PriceCalculatorService
-     */
     public function setReferrer(?string $referrer): PriceCalculatorService
     {
         $this->referrer = $referrer;

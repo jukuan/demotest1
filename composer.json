@@ -31,11 +31,13 @@
         "symfony/yaml": "5.1.*"
     },
     "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.16",
         "symfony/debug-pack": "*",
         "symfony/maker-bundle": "^1.0",
         "symfony/phpunit-bridge": "^5.1",
         "symfony/profiler-pack": "*",
-        "symfony/test-pack": "*"
+        "symfony/test-pack": "*",
+        "vimeo/psalm": "^3.12"
     },
     "config": {
         "optimize-autoloader": true,
