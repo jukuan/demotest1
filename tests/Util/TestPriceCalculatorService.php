@@ -9,9 +9,6 @@ class TestPriceCalculatorService extends TestCase
 {
     /**
      * @dataProvider provideCoefficientData
-     *
-     * @param string $domain
-     * @param float $coefficient
      */
     public function testCoefficient(string $domain, float $coefficient)
     {
@@ -20,11 +17,12 @@ class TestPriceCalculatorService extends TestCase
         $this->assertEquals($coefficient, $result);
     }
 
-    function provideCoefficientData()
+    public function provideCoefficientData()
     {
         // Google
         yield ['google.com', 1.2];
         yield ['GooGlE.com', 1.2];
+        yield ['plus.google.com', 1.2];
         yield ['http://google.com', 1.2];
         yield ['https://google.com', 1.2];
         yield ['https://www.google.com', 1.2];
@@ -37,6 +35,7 @@ class TestPriceCalculatorService extends TestCase
         yield ['https://bing.com/', 1.1];
         yield ['http://bing.com/', 1.1];
         yield ['http://bIng.com', 1.1];
+        yield ['photo.bing.com', 1.1];
         yield ['bing.com', 1.1];
         yield ['BING.COM', 1.1];
 

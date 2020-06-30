@@ -16,6 +16,11 @@ final class Book
      */
     protected float $basePrice;
 
+    public function __construct()
+    {
+        $this->basePrice = 0;
+    }
+
     public function getBasePrice(): float
     {
         return $this->basePrice;

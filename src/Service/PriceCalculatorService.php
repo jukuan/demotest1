@@ -26,18 +26,12 @@ final class PriceCalculatorService
         $this->session = $session;
     }
 
-    /**
-     * @return float|int
-     */
-    public function getBasePrice()
+    public function getBasePrice(): float
     {
         return $this->basePrice;
     }
 
-    /**
-     * @return PriceCalculatorService
-     */
-    public function setBasePrice(float $basePrice)
+    public function setBasePrice(float $basePrice): PriceCalculatorService
     {
         $this->basePrice = $basePrice;
 
@@ -59,11 +53,16 @@ final class PriceCalculatorService
         return $this;
     }
 
+    private function isSessionExpired(): bool
+    {
+        return time() - $this->session->getMetadataBag()->getLastUsed() > self::SESSION_MAX_IDLE_TIME;
+    }
+
     public function calculateCoefficient(): float
     {
         $referrer = $this->getReferrer();
 
-        if (time() - $this->session->getMetadataBag()->getLastUsed() > self::SESSION_MAX_IDLE_TIME) {
+        if ($this->isSessionExpired()) {
             $referrer = null;
         }
 

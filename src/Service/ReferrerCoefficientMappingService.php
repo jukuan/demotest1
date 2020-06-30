@@ -34,11 +34,12 @@ final class ReferrerCoefficientMappingService
             $source
         );
 
-        $partials = parse_url($source);
+        $partials = array_merge(
+            ['path' => ''],
+            parse_url($source)
+        );
 
-        $host = $partials['host'] ?? $partials['path'];
-
-        return $host;
+        return $partials['host'] ?? $partials['path'];
     }
 
     public function setUtmSource(?string $source): ReferrerCoefficientMappingService
@@ -55,14 +56,20 @@ final class ReferrerCoefficientMappingService
         return (null !== $this->utmSource) && strlen($this->utmSource) > 0;
     }
 
+    private function isSameProvider(string $provider, ?string $source): bool
+    {
+        if (null === $source) {
+            return false;
+        }
+
+        return 0 === strpos($provider, $source) || false !== strpos($source, $provider);
+    }
+
     public function getCoefficient(): float
     {
         if ($this->isUtmSourceValid()) {
             foreach (self::SOURCE_MAPPING as $provider => $coefficient) {
-                if (
-                    0 === strpos($provider, $this->utmSource) ||
-                    0 === strpos($this->utmSource, $provider)
-                ) {
+                if ($this->isSameProvider($provider, $this->utmSource)) {
                     return $coefficient;
                 }
             }
