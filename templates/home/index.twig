@@ -53,7 +53,10 @@
                                 </p>
 
                                 <p class="is-size-4">
-                                    Special price for you is <span class="currency">$</span>&nbsp;<strong>{{ price }}</strong>.
+                                    Special price for you is
+                                    <strong class="price">
+                                        {{ price|format_currency('USD', {fraction_digit: 2}) }}
+                                    </strong>.
                                 </p>
 
                                 <p>
