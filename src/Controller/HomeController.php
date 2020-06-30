@@ -8,6 +8,7 @@ use App\Entity\Book;
 use App\Service\PriceCalculatorService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 final class HomeController extends AbstractController
@@ -18,8 +19,10 @@ final class HomeController extends AbstractController
 
     private PriceCalculatorService $priceCalculatorService;
 
-    public function __construct(RequestStack $requestStack, PriceCalculatorService $priceCalculatorService)
-    {
+    public function __construct(
+        RequestStack $requestStack,
+        PriceCalculatorService $priceCalculatorService
+    ) {
         $request = $requestStack->getCurrentRequest();
         $referrer = (null !== $request) ? $request->server->get('HTTP_REFERER') : null;
 

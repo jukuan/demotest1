@@ -4,17 +4,26 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+
 final class PriceCalculatorService
 {
+    private const SESSION_MAX_IDLE_TIME = 432000; // 5 days
+
     private float $basePrice = 0;
 
     private ?string $referrer = null;
 
     private ReferrerCoefficientMappingService $coefficientMappingService;
 
-    public function __construct(ReferrerCoefficientMappingService $coefficientMappingService)
-    {
+    private SessionInterface $session;
+
+    public function __construct(
+        ReferrerCoefficientMappingService $coefficientMappingService,
+        SessionInterface $session
+    ) {
         $this->coefficientMappingService = $coefficientMappingService;
+        $this->session = $session;
     }
 
     /**
@@ -37,25 +46,34 @@ final class PriceCalculatorService
 
     public function getReferrer(): ?string
     {
-        return $this->referrer;
+        return $this->session->get('http_referer', $this->referrer);
     }
 
     public function setReferrer(?string $referrer): PriceCalculatorService
     {
-        $this->referrer = $referrer;
+        if (null !== $referrer) {
+            $this->referrer = $referrer;
+            $this->session->set('http_referer', $referrer);
+        }
 
         return $this;
     }
 
-    public function getCoefficient(): float
+    public function calculateCoefficient(): float
     {
+        $referrer = $this->getReferrer();
+
+        if (time() - $this->session->getMetadataBag()->getLastUsed() > self::SESSION_MAX_IDLE_TIME) {
+            $referrer = null;
+        }
+
         return $this->coefficientMappingService
-            ->setUtmSource($this->referrer)
+            ->setUtmSource($referrer)
             ->getCoefficient();
     }
 
     public function getPersonalPrice(): float
     {
-        return $this->getBasePrice() * $this->getCoefficient();
+        return $this->getBasePrice() * $this->calculateCoefficient();
     }
 }

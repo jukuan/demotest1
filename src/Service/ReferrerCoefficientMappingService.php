@@ -12,6 +12,12 @@ final class ReferrerCoefficientMappingService
 
     private const SOURCE_GOOGLE = 'google.';
 
+    private const URL_TRANSFORMATIONS = [
+        'https' => 'http',
+        '://www.' => '://',
+        'www.' => '',
+    ];
+
     private const SOURCE_MAPPING = [
         self::SOURCE_BING => 1.1,   // 110% for bing
         self::SOURCE_GOOGLE => 1.2, // 120% for google
@@ -19,22 +25,26 @@ final class ReferrerCoefficientMappingService
 
     public ?string $utmSource = null;
 
-    private function prepareUtmSource(string $source): string
+    private static function prepareUtmSource(string $source): string
     {
-        $source = str_replace(['https'], ['http'], $source);
-        $source = str_replace(['://www.', 'www.'], ['://', ''], $source);
+        $source = strtolower($source);
+        $source = str_replace(
+            array_keys(self::URL_TRANSFORMATIONS),
+            array_values(self::URL_TRANSFORMATIONS),
+            $source
+        );
 
         $partials = parse_url($source);
 
         $host = $partials['host'] ?? $partials['path'];
 
-        return strtolower($host);
+        return $host;
     }
 
     public function setUtmSource(?string $source): ReferrerCoefficientMappingService
     {
         if (null !== $source) {
-            $this->utmSource = $this->prepareUtmSource($source);
+            $this->utmSource = self::prepareUtmSource($source);
         }
 
         return $this;
@@ -50,8 +60,8 @@ final class ReferrerCoefficientMappingService
         if ($this->isUtmSourceValid()) {
             foreach (self::SOURCE_MAPPING as $provider => $coefficient) {
                 if (
-                    false !== strpos($provider, $this->utmSource) ||
-                    false !== strpos($this->utmSource, $provider)
+                    0 === strpos($provider, $this->utmSource) ||
+                    0 === strpos($this->utmSource, $provider)
                 ) {
                     return $coefficient;
                 }

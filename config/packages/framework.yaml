@@ -10,6 +10,8 @@ framework:
         handler_id: null
         cookie_secure: auto
         cookie_samesite: lax
+        gc_probability: 0
+        gc_maxlifetime: 432000 # 5 days
 
     #esi: true
     #fragments: true

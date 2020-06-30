@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Service;
+namespace App\Tests\Util;
 
 use App\Service\ReferrerCoefficientMappingService;
 use PHPUnit\Framework\TestCase;
@@ -24,6 +24,7 @@ class TestPriceCalculatorService extends TestCase
     {
         // Google
         yield ['google.com', 1.2];
+        yield ['GooGlE.com', 1.2];
         yield ['http://google.com', 1.2];
         yield ['https://google.com', 1.2];
         yield ['https://www.google.com', 1.2];
@@ -35,7 +36,9 @@ class TestPriceCalculatorService extends TestCase
         // Bing
         yield ['https://bing.com/', 1.1];
         yield ['http://bing.com/', 1.1];
+        yield ['http://bIng.com', 1.1];
         yield ['bing.com', 1.1];
+        yield ['BING.COM', 1.1];
 
         // Unexisted
         yield ['googleitformeplease.com', 1];
